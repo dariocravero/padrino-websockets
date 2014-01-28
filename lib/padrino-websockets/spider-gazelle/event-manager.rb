@@ -3,10 +3,9 @@ module Padrino
     module SpiderGazelle
       class EventManager < BaseEventManager
         def initialize(channel, user, ws, event_context, &block)
-          @loop = ws.socket.loop
           ws.progress method(:on_message)
           ws.finally method(:on_shutdown)
-          ws.driver.on :open, &method(:on_open)
+          ws.on_open method(:on_open)
 
           super channel, user, ws, event_context, &block
         end
@@ -33,9 +32,9 @@ module Padrino
           def on_open(event)
             super event
 
-            if @ws.driver.ping('pong')
+            if @ws.ping('pong')
               variation = 1 + rand(20000)
-              @pinger = @loop.scheduler.every(40000 + variation, method(:do_ping))
+              @pinger = @ws.loop.scheduler.every 40000 + variation, method(:do_ping)
             end
           end
 
@@ -43,7 +42,7 @@ module Padrino
           # Ping the WebSocket connection
           #
           def do_ping(time1, time2)
-            @ws.driver.ping('pong')
+            @ws.ping 'pong'
           end
       end
     end

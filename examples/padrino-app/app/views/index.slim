@@ -1,0 +1,19 @@
+h1 Padrino WebSockets demo
+
+p Watch out your developer's console. There's a <strong>connection</strong> variable ready to use.
+
+javascript:
+  !function(window) {
+    'use strict';
+
+    window.connection = new WebSocket('ws://localhost:3000/channel');
+
+    connection.onopen = function(message) {
+      console.log('connected to channel');
+      connection.send(JSON.stringify({event: 'test', some: 'data'}));
+    }
+
+    connection.onmessage = function(message) {
+      console.log('message', JSON.parse(message.data));
+    }
+  }(window);
