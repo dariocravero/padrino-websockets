@@ -130,8 +130,8 @@ module Padrino
       ##
       # Broadcast a message to the whole channel
       #
-      def broadcast(message)
-        self.class.broadcast @channel, message
+      def broadcast(message, except=[])
+        self.class.broadcast @channel, message, except
       end
 
       ##
@@ -146,10 +146,11 @@ module Padrino
         # Broadcast a message to the whole channel.
         # Can be used to access it outside the router's scope, for instance, in a background process.
         #
-        def broadcast(channel, message)
+        def broadcast(channel, message, except=[])
           logger.debug "Broadcasting message on channel: #{channel}. Message:"
           logger.debug message
           @@connections[channel].each do |user, ws|
+            next if except.include?(user)
             write message, ws
           end
         end
