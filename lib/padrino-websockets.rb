@@ -18,8 +18,15 @@ module Padrino
           require 'padrino-websockets/spider-gazelle'
           app.helpers Padrino::WebSockets::SpiderGazelle::Helpers
           app.extend Padrino::WebSockets::SpiderGazelle::Routing
+        elsif defined?(::Faye::WebSocket)
+          require 'padrino-websockets/faye'
+
+          ::Faye::WebSocket.load_adapter('thin') if defined?(::Thin)
+
+          app.helpers Padrino::WebSockets::Faye::Helpers
+          app.extend Padrino::WebSockets::Faye::Routing
         else
-          logger.error "Can't find a WebSockets backend. At the moment we only support SpiderGazelle."
+          logger.error "Can't find a WebSockets backend. At the moment we only support SpiderGazelle and Faye Websockets."
           raise NotImplementedError
         end
 
