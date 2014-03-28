@@ -10,6 +10,10 @@ backend working with LibUV.
 
 Feel free to implement your own backend using, say, EventMachine and submit it! :)
 
+
+UPDATE: See the [faye-support](https://github.com/dariocravero/padrino-websockets/tree/faye-support) branch for Thin support (more updats coming on this).
+
+
 ## Installation
 
 Add this line to your application's `Gemfile`:
