@@ -7,16 +7,14 @@ A WebSockets abstraction for the Padrino Ruby Web Framework to manage
 
 * [SpiderGazelle](https://github.com/cotag/spider-gazelle) a LibUV application server.
 * [Puma](http://puma.io/) >= 2.0. (*)
-* [Thin](http://code.macournoyer.com/thin/) (*)
-* [Rainbows](http://rainbows.rubyforge.org/) (*) (**)
-* [Goliath](http://postrank-labs.github.com/goliath/) (*) (**)
-* [Phusion Passenger](https://www.phusionpassenger.com/) >= 4.0 with nginx >= 1.4 (*) (**)
+* [Thin](http://code.macournoyer.com/thin/)  (*)
+* [Rainbows](http://rainbows.rubyforge.org/)  (\*)  (**)
+* [Goliath](http://postrank-labs.github.com/goliath/)  (\*) (**)
+* [Phusion Passenger](https://www.phusionpassenger.com/) >= 4.0 with nginx >= 1.4  (\*)  (**)
 
 (*) Supported through [faye-websocket-ruby](https://github.com/faye/faye-websocket-ruby).
+ 
 (**) Untested.
-
-
-UPDATE: See the [faye-support](https://github.com/dariocravero/padrino-websockets/tree/faye-support) branch for Thin support (more updats coming on this).
 
 
 ## Installation
