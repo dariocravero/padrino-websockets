@@ -5,10 +5,15 @@ A WebSockets abstraction for the Padrino Ruby Web Framework to manage
 
 ## Current support
 
-The current version supports [SpiderGazelle](https://github.com/cotag/spider-gazelle) as its
-backend working with LibUV.
+* [SpiderGazelle](https://github.com/cotag/spider-gazelle) a LibUV application server.
+* [Puma](http://puma.io/) >= 2.0. (*)
+* [Thin](http://code.macournoyer.com/thin/) (*)
+* [Rainbows](http://rainbows.rubyforge.org/) (*) (**)
+* [Goliath](http://postrank-labs.github.com/goliath/) (*) (**)
+* [Phusion Passenger](https://www.phusionpassenger.com/) >= 4.0 with nginx >= 1.4 (*) (**)
 
-Feel free to implement your own backend using, say, EventMachine and submit it! :)
+(*) Supported through [faye-websocket-ruby](https://github.com/faye/faye-websocket-ruby).
+(**) Untested.
 
 
 UPDATE: See the [faye-support](https://github.com/dariocravero/padrino-websockets/tree/faye-support) branch for Thin support (more updats coming on this).
@@ -19,10 +24,6 @@ UPDATE: See the [faye-support](https://github.com/dariocravero/padrino-websocket
 Add this line to your application's `Gemfile`:
 
 ```
-# It only works with SpiderGazelle for now, so this dependency is a must at the moment.
-gem 'spider-gazelle', github: 'cotag/spider-gazelle'
-gem 'uv-rays', github: 'cotag/uv-rays'
-
 gem 'padrino-websockets'
 ```
 
@@ -50,7 +51,7 @@ Then in any controller or in the app itself, define a WebSocket channel:
 
 ```
 websocket :channel do
-  event :ping do |context, message|
+  on :ping do |message|
     send_message({pong: true, data: message})
   end
 end

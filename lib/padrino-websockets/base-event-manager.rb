@@ -46,6 +46,7 @@ module Padrino
       def event(name, &block)
         @events[name.to_sym] = block if block_given?
       end
+      alias :on :event
 
       ##
       # Message receiver
@@ -86,13 +87,12 @@ module Padrino
           end
 
           # Call it
-          # TODO Run the event in the context of the app
-          # @events[event].bind(@event_context).call
           # TODO Make the params (message) available through the params variable as we do
           # in normal actions.
           logger.debug "Calling event: #{event} as user: #{@user} on channel #{@channel}."
           logger.debug message.inspect
-          @events[event].call(@event_context, message)
+          # Run the event in the context of the app
+          @event_context.instance_exec message, &@events[event]
         rescue Oj::ParseError => e
           logger.error ERRORS[:parse_message]
           logger.error e.message
@@ -125,20 +125,6 @@ module Padrino
       def on_shutdown
         logger.debug "Disconnecting user: #{@user} from channel: #{@channel}."
         @@connections[@channel].delete(@ws)
-      end
-
-      ##
-      # Broadcast a message to the whole channel
-      #
-      def broadcast(message, except=[])
-        self.class.broadcast @channel, message, except
-      end
-
-      ##
-      # Send a message to a user on the channel
-      #
-      def send_message(message, user=@user)
-        self.class.send_message @channel, user, message
       end
 
       class << self
