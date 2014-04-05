@@ -38,18 +38,6 @@ module Padrino
             super event
 
             @ws.ping('pong')
-
-            # if @ws.ping('pong')
-            #   variation = 1 + rand(20000)
-            #   @pinger = @ws.ping 'pong' #loop.scheduler.every 40000 + variation, method(:do_ping)
-            # end
-          end
-
-          ##
-          # Ping the WebSocket connection
-          #
-          def do_ping(time1, time2)
-            @ws.ping 'pong'
           end
       end
     end

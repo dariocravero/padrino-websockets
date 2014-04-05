@@ -25,7 +25,9 @@ module Padrino
           app.helpers Padrino::WebSockets::Faye::Helpers
           app.extend Padrino::WebSockets::Faye::Routing
         else
-          logger.error "Can't find a WebSockets backend. At the moment we only support SpiderGazelle and Faye Websockets."
+          logger.error %Q{Can't find a WebSockets backend. At the moment we only support
+            SpiderGazelle and Faye Websockets friendly application backends (Puma and Thin work,
+            Rainbows, Goliath and Phusion Passenger remain untested and may break).}
           raise NotImplementedError
         end
 
