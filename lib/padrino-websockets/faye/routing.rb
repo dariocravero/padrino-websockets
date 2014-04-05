@@ -16,8 +16,7 @@ module Padrino
             throw :pass unless ::Faye::WebSocket.websocket?(request.env)
 
             set_websocket_user
-            puts request.env['rack.hijack_io']
-            ws = ::Faye::WebSocket.new(request.env, nil, {ping: 15})
+            ws = ::Faye::WebSocket.new(env, nil, {ping: 15})
             Padrino::WebSockets::Faye::EventManager.new(channel, session['websocket_user'],
                                                         ws, self, &block)
             ws.rack_response

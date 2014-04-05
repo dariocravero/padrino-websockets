@@ -20,9 +20,8 @@ module Padrino
           app.extend Padrino::WebSockets::SpiderGazelle::Routing
         elsif defined?(::Faye::WebSocket)
           require 'padrino-websockets/faye'
-
           ::Faye::WebSocket.load_adapter('thin') if defined?(::Thin)
-
+          require 'padrino-websockets/faye/puma-patch' if defined?(Puma)
           app.helpers Padrino::WebSockets::Faye::Helpers
           app.extend Padrino::WebSockets::Faye::Routing
         else
