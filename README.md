@@ -50,7 +50,8 @@ Then in any controller or in the app itself, define a WebSocket channel:
 ```
 websocket :channel do
   on :ping do |message|
-    send_message({pong: true, data: message})
+    send_message(:ping, session['websocket_user'], {pong: true, data: message})
+    broadcast(:ping, {pong: true, data: message, broadcast: true})
   end
 end
 ```

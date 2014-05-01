@@ -4,16 +4,19 @@ source 'https://rubygems.org'
 # gemspec
 
 # Server requirements
-# gem 'thin' # or mongrel
-# gem 'trinidad', :platform => 'jruby'
-gem 'spider-gazelle', github: 'cotag/spider-gazelle'
+# For Puma
+gem 'faye-websocket'
+gem 'puma'
+
+# For SpiderGazelle
+# gem 'spider-gazelle', github: 'cotag/spider-gazelle'
+# gem 'uv-rays', github: 'cotag/uv-rays'
 
 # Optional JSON codec (faster performance)
 gem 'oj'
 
 # Project requirements
 gem 'rake'
-gem 'uv-rays', github: 'cotag/uv-rays'
 gem 'padrino-websockets', path: '../..'
 # gem 'padrino-websockets', github: 'dariocravero/padrino-websockets'
 

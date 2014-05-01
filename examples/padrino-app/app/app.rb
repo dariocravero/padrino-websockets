@@ -10,9 +10,10 @@ module PadrinoWebsocketsDemo
     end
 
     websocket :channel do
-      event :test do |context, message|
+      on :test do |message|
         "test on channel"
-        send_message message
+        send_message :channel, session['websocket_user'], message
+        broadcast :channel, message.merge({'broadcast' => true})
       end
     end
   end
