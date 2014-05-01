@@ -23,6 +23,9 @@ Add this line to your application's `Gemfile`:
 
 ```
 gem 'padrino-websockets'
+
+# Uncomment the following line if you're using a Faye backend
+# gem 'faye-websocket'
 ```
 
 And then execute:
