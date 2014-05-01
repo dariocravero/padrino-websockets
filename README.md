@@ -1,7 +1,7 @@
 # Padrino Websockets
 
 A WebSockets abstraction for the Padrino Ruby Web Framework to manage
-    channels, users and events regardless of the underlying WebSockets implementation.
+channels, users and events regardless of the underlying WebSockets implementation.
 
 ## Current support
 
