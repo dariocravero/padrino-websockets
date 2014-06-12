@@ -17,7 +17,8 @@ module Padrino
 
             set_websocket_user
             ws = ::Faye::WebSocket.new(env, nil, {ping: 15})
-            Padrino::WebSockets::Faye::EventManager.new(channel, session['websocket_user'],
+            Padrino::WebSockets::Faye::EventManager.new(params[:channel] || channel,
+                                                        session['websocket_user'],
                                                         ws, self, &block)
             ws.rack_response
           end

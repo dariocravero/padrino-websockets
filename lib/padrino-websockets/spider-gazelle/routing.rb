@@ -16,6 +16,7 @@ module Padrino
             throw :pass unless request.env['rack.hijack']
 
             event_context = self
+            ws_channel = params[:channel] || channel
 
             # It's a WebSocket. Get the libuv promise and manage its events
             request.env['rack.hijack'].call.then do |hijacked|
@@ -24,7 +25,7 @@ module Padrino
               set_websocket_user
 
               Padrino::WebSockets::SpiderGazelle::EventManager.new(
-                channel, session['websocket_user'], ws, event_context, &block)
+                ws_channel, session['websocket_user'], ws, event_context, &block)
               ws.start
             end
           end
