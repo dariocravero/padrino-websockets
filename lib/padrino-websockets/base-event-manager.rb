@@ -98,7 +98,7 @@ module Padrino
           logger.error e.message
           logger.error e.backtrace.join("\n")
 
-          send_message({error: {
+          self.class.send_message({error: {
             name: :parse_message,
             message: ERRORS[:parse_message]
           }})
@@ -107,7 +107,7 @@ module Padrino
           logger.error e.message
           logger.error e.backtrace.join("\n")
 
-          send_message({error: {
+          self.class.send_message({error: {
             name: :runtime,
             message: ERRORS[:runtime],
             event: event,
