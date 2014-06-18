@@ -25,25 +25,26 @@ module Padrino
           ws.text ::Oj.dump(message)
         end
 
-        protected
-          ##
-          # Maintain the connection if ping frames are supported
-          #
-          def on_open(event)
-            super event
+        # protected
+        #   ##
+        #   # Maintain the connection if ping frames are supported
+        #   #
+        #   def on_open(event)
+        #     super event
 
-            if @ws.ping('pong')
-              variation = 1 + rand(20000)
-              @pinger = @ws.loop.scheduler.every 40000 + variation, method(:do_ping)
-            end
-          end
+        #     if @ws.ping('pong')
+        #       variation = 1 + rand(20000)
+        #       binding.pry
+        #       @pinger = @ws.loop.scheduler.every 40000 + variation, method(:do_ping)
+        #     end
+        #   end
 
-          ##
-          # Ping the WebSocket connection
-          #
-          def do_ping(time1, time2)
-            @ws.ping 'pong'
-          end
+        #   ##
+        #   # Ping the WebSocket connection
+        #   #
+        #   def do_ping(time1, time2)
+        #     @ws.ping 'pong'
+        #   end
       end
     end
   end
