@@ -21,6 +21,7 @@ module Padrino
         #
         def on_shutdown(event)
           @pinger.cancel if @pinger
+          super
         end
 
         ##

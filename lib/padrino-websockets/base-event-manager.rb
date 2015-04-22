@@ -124,7 +124,7 @@ module Padrino
       #
       def on_shutdown
         logger.debug "Disconnecting user: #{@user} from channel: #{@channel}."
-        @@connections[@channel].delete(@ws)
+        @@connections[@channel].delete(@user)
       end
 
       class << self
