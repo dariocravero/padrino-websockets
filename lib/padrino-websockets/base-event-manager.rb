@@ -133,7 +133,7 @@ module Padrino
 
         # all external calls *MUST* pass through pub-sub machinary.  
         # this allows ws outbound messages to get distributed to other
-        # servers/processes.  the pubsub impl is responsible from 
+        # servers/processes.
 
         def broadcast(channel, message, except=[])
           @@pub_sub.broadcast(channel, message, except)
@@ -175,13 +175,11 @@ module Padrino
           raise NotImplementedError
         end
 
+        # set active pubsub impl.  there is a 2-way handshake because the pub-sub
+        # impl *must* be able to forward messages to local websocket connections
         def pub_sub=(pub_sub)
           @@pub_sub = pub_sub
           @@pub_sub.event_manager = self
-        end
-
-        def pub_sub
-          @@pub_sub
         end
       end
 

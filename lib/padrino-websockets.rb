@@ -14,13 +14,16 @@ module Padrino
       def registered(app)
         require 'padrino-websockets/base-event-manager'
         require 'padrino-websockets/pub_sub'
-        # set default pubsub,  initializer can override w/ different impl
-
+        # set default pubsub to in-memory.  initializer can override with a different
+        # implementation
 
         if defined?(::SpiderGazelle)
           require 'padrino-websockets/spider-gazelle'
           app.helpers Padrino::WebSockets::SpiderGazelle::Helpers
           app.extend Padrino::WebSockets::SpiderGazelle::Routing
+          
+          # set default pubsub to in-memory.  initializer can override with a different
+          # implementation
           Padrino::WebSockets::SpiderGazelle::EventManager.pub_sub = Padrino::WebSockets::PubSub.new
         elsif defined?(::Faye::WebSocket)
           require 'padrino-websockets/faye'
@@ -28,6 +31,9 @@ module Padrino
           require 'padrino-websockets/faye/puma-patch' if defined?(Puma)
           app.helpers Padrino::WebSockets::Faye::Helpers
           app.extend Padrino::WebSockets::Faye::Routing
+
+          # set default pubsub to in-memory.  initializer can override with a different
+          # implementation
           Padrino::WebSockets::Faye::EventManager.pub_sub = Padrino::WebSockets::PubSub.new
         else
           logger.error %Q{Can't find a WebSockets backend. At the moment we only support
