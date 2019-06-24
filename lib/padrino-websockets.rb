@@ -14,27 +14,27 @@ module Padrino
       def registered(app)
         require 'padrino-websockets/base-event-manager'
         require 'padrino-websockets/pub_sub'
-        # set default pubsub to in-memory.  initializer can override with a different
-        # implementation
+        # set default pubsub to in-memory.  setting can override with a different
+        # implementation in your app settings
+        # example:
+        # set :websockets_pub_sub, SomeWeirdPubSub.new
+        #
+        unless app.respond_to?(:websockets_pub_sub)
+          app.set :websockets_pub_sub, Padrino::WebSockets::PubSub.new
+        end
 
         if defined?(::SpiderGazelle)
           require 'padrino-websockets/spider-gazelle'
           app.helpers Padrino::WebSockets::SpiderGazelle::Helpers
           app.extend Padrino::WebSockets::SpiderGazelle::Routing
-          
-          # set default pubsub to in-memory.  initializer can override with a different
-          # implementation
-          Padrino::WebSockets::SpiderGazelle::EventManager.pub_sub = Padrino::WebSockets::PubSub.new
+          Padrino::WebSockets::SpiderGazelle::EventManager.pub_sub = app.websockets_pub_sub
         elsif defined?(::Faye::WebSocket)
           require 'padrino-websockets/faye'
           ::Faye::WebSocket.load_adapter('thin') if defined?(::Thin)
           require 'padrino-websockets/faye/puma-patch' if defined?(Puma)
           app.helpers Padrino::WebSockets::Faye::Helpers
           app.extend Padrino::WebSockets::Faye::Routing
-
-          # set default pubsub to in-memory.  initializer can override with a different
-          # implementation
-          Padrino::WebSockets::Faye::EventManager.pub_sub = Padrino::WebSockets::PubSub.new
+          Padrino::WebSockets::Faye::EventManager.pub_sub = app.websockets_pub_sub
         else
           logger.error %Q{Can't find a WebSockets backend. At the moment we only support
             SpiderGazelle and Faye Websockets friendly application backends (Puma and Thin work,

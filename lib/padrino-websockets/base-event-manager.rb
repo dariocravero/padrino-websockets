@@ -150,6 +150,11 @@ module Padrino
         def broadcast_local(channel, message, except=[])
           logger.debug "Broadcasting message on channel: #{channel}. Message:"
           logger.debug message
+          if @@connections[channel].nil?
+            logger.error "channel not configured: #{channel}"
+            return nil
+          end
+
           @@connections[channel].each do |user, ws|
             next if except.include?(user)
             write message, ws
@@ -162,6 +167,11 @@ module Padrino
         #
         def send_message_local(channel, user, message)
           logger.debug "Sending message: #{message} to user: #{user} on channel: #{channel}. Message"
+          if @@connections[channel].nil?
+            logger.error "channel not configured: #{channel}"
+            return nil
+          end
+
           write message, @@connections[channel][user]
         end
 
