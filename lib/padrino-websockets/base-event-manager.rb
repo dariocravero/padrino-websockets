@@ -10,6 +10,9 @@ module Padrino
         runtime: "Error while running the event handler"
       }
 
+      @@pub_sub = nil
+      @@connections = {}
+
       ##
       # Creates a new WebSocket manager for a specific connection with a user on a channel.
       #
@@ -29,7 +32,6 @@ module Padrino
         @channel = channel
         @user = user
         @ws = ws
-        @@connections ||= {}
         @@connections[@channel] ||= {}
         @@connections[@channel][@user] = @ws
 
@@ -128,11 +130,24 @@ module Padrino
       end
 
       class << self
+
+        # all external calls *MUST* pass through pub-sub machinary.  
+        # this allows ws outbound messages to get distributed to other
+        # servers/processes.  the pubsub impl is responsible from 
+
+        def broadcast(channel, message, except=[])
+          @@pub_sub.broadcast(channel, message, except)
+        end
+
+        def send_message(channel, user, message)
+          @@pub_sub.send_message(channel, user, message)
+        end
+
         ##
         # Broadcast a message to the whole channel.
         # Can be used to access it outside the router's scope, for instance, in a background process.
         #
-        def broadcast(channel, message, except=[])
+        def broadcast_local(channel, message, except=[])
           logger.debug "Broadcasting message on channel: #{channel}. Message:"
           logger.debug message
           @@connections[channel].each do |user, ws|
@@ -145,7 +160,7 @@ module Padrino
         # Send a message to a user on the channel
         # Can be used to access it outside the router's scope, for instance, in a background process.
         #
-        def send_message(channel, user, message)
+        def send_message_local(channel, user, message)
           logger.debug "Sending message: #{message} to user: #{user} on channel: #{channel}. Message"
           write message, @@connections[channel][user]
         end
@@ -159,7 +174,17 @@ module Padrino
           logger.error "Override the write method on the WebSocket-specific backend."
           raise NotImplementedError
         end
+
+        def pub_sub=(pub_sub)
+          @@pub_sub = pub_sub
+          @@pub_sub.event_manager = self
+        end
+
+        def pub_sub
+          @@pub_sub
+        end
       end
+
 
       protected
         ##

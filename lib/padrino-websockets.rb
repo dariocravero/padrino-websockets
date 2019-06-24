@@ -13,17 +13,22 @@ module Padrino
       #
       def registered(app)
         require 'padrino-websockets/base-event-manager'
+        require 'padrino-websockets/pub_sub'
+        # set default pubsub,  initializer can override w/ different impl
+
 
         if defined?(::SpiderGazelle)
           require 'padrino-websockets/spider-gazelle'
           app.helpers Padrino::WebSockets::SpiderGazelle::Helpers
           app.extend Padrino::WebSockets::SpiderGazelle::Routing
+          Padrino::WebSockets::SpiderGazelle::EventManager.pub_sub = Padrino::WebSockets::PubSub.new
         elsif defined?(::Faye::WebSocket)
           require 'padrino-websockets/faye'
           ::Faye::WebSocket.load_adapter('thin') if defined?(::Thin)
           require 'padrino-websockets/faye/puma-patch' if defined?(Puma)
           app.helpers Padrino::WebSockets::Faye::Helpers
           app.extend Padrino::WebSockets::Faye::Routing
+          Padrino::WebSockets::Faye::EventManager.pub_sub = Padrino::WebSockets::PubSub.new
         else
           logger.error %Q{Can't find a WebSockets backend. At the moment we only support
             SpiderGazelle and Faye Websockets friendly application backends (Puma and Thin work,
